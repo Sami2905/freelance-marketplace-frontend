@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { createContext, useState, useEffect, useContext } from 'react';
+import { createContext, useState, useEffect, useContext, useRef } from 'react';
 
 interface User {
   _id: string;
@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
   const [requireManualLogin, setRequireManualLogin] = useState(false);
   const router = useRouter();
+  const isFetchingRef = useRef(false);
 
   // Development flag to force manual login (set to true to disable auto-login)
   const FORCE_MANUAL_LOGIN = false;
@@ -62,8 +63,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const fetchProfile = async () => {
-    if (isLoading) return; // Prevent multiple simultaneous calls
+    if (isFetchingRef.current) return; // Prevent multiple simultaneous calls
     
+    isFetchingRef.current = true;
     setIsLoading(true);
     try {
       const API_URL = getApiUrl();
@@ -123,6 +125,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setRequireManualLogin(true);
     } finally {
       setIsLoading(false);
+      isFetchingRef.current = false;
     }
   };
 
@@ -240,7 +243,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Check for existing session on mount (only once)
   useEffect(() => {
-    if (!hasCheckedAuth) {
+    if (!hasCheckedAuth && !isFetchingRef.current) {
       const checkAuth = async () => {
         try {
           console.log('🔍 Starting authentication check...');
