@@ -7,8 +7,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "./AuthContext";
 import { ToastProvider } from "@radix-ui/react-toast";
-import TourProvider from "@/components/providers/TourProvider";
-import FloatingHelp from "@/components/ui/FloatingHelp";
 
 // Force dynamic rendering for the entire app
 export const dynamic = 'force-dynamic';
@@ -94,13 +92,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
           >
             <TooltipProvider>
               <ToastProvider>
-                <TourProvider>
-                  <div className="relative flex min-h-screen flex-col">
-                    {children}
-                    <Toaster />
-                    <FloatingHelp />
-                  </div>
-                </TourProvider>
+                <div className="relative flex min-h-screen flex-col">
+                  {children}
+                  <Toaster />
+                </div>
               </ToastProvider>
             </TooltipProvider>
           </ThemeProvider>
