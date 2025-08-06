@@ -4,7 +4,7 @@ const nextConfig = {
     domains: [
       'localhost',
       'freelance-marketplace-backend-tvch.onrender.com',
-      'res.cloudinary.com', // If you use Cloudinary for images
+      'res.cloudinary.com',
     ],
     remotePatterns: [
       {
@@ -15,24 +15,22 @@ const nextConfig = {
       },
     ],
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'https://freelance-marketplace-backend-tvch.onrender.com/api/:path*',
-      },
-    ];
-  },
   // Optimize for production
   swcMinify: true,
   // Enable compression
   compress: true,
-  // Enable source maps in development only
+  // Disable source maps in production
   productionBrowserSourceMaps: false,
-  // Disable static generation for pages that need authentication
-  trailingSlash: false,
-  // Skip static generation for problematic pages
-  skipTrailingSlashRedirect: true,
+  // Experimental features
+  experimental: {
+    // Enable app directory
+    appDir: true,
+  },
+  // Webpack configuration
+  webpack: (config, { isServer }) => {
+    // Add any webpack configurations here
+    return config;
+  },
 };
 
 module.exports = nextConfig;
