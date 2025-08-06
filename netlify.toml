@@ -3,7 +3,7 @@
   publish = ".next"
 
 [build.environment]
-  NEXT_PUBLIC_API_URL = "https://freelance-marketplace-backend-tvch.onrender.com/api"
+  NEXT_PUBLIC_API_URL = "https://freelance-marketplace-backend-tvch.onrender.com"
   NEXT_PUBLIC_WS_URL = "wss://freelance-marketplace-backend-tvch.onrender.com"
 
 [dev]
