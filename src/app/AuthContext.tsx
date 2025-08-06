@@ -44,6 +44,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [requireManualLogin, setRequireManualLogin] = useState(false);
   const router = useRouter();
   const isFetchingRef = useRef(false);
+  const hasInitializedRef = useRef(false);
 
   // Development flag to force manual login (set to true to disable auto-login)
   const FORCE_MANUAL_LOGIN = false;
@@ -243,7 +244,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Check for existing session on mount (only once)
   useEffect(() => {
-    if (!hasCheckedAuth && !isFetchingRef.current) {
+    if (!hasCheckedAuth && !isFetchingRef.current && !hasInitializedRef.current) {
+      hasInitializedRef.current = true;
       const checkAuth = async () => {
         try {
           console.log('🔍 Starting authentication check...');
@@ -269,12 +271,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             return;
           }
           
+          // Check if we have a token before trying to fetch profile
+          const token = localStorage.getItem('authToken');
+          if (!token) {
+            console.log('🔑 No auth token found, requiring manual login');
+            setRequireManualLogin(true);
+            setHasCheckedAuth(true);
+            setIsLoading(false);
+            return;
+          }
+          
           console.log('🔐 Checking existing session...');
           await fetchProfile();
         } catch (error) {
           console.error('❌ Initial auth check failed:', error);
           setUser(null);
           setRequireManualLogin(true);
+          localStorage.removeItem('authToken'); // Clear invalid token
         } finally {
           setHasCheckedAuth(true);
         }
