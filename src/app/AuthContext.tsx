@@ -240,7 +240,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Check for existing session on mount (only once)
   useEffect(() => {
-    if (!hasCheckedAuth && !user) {
+    if (!hasCheckedAuth) {
       const checkAuth = async () => {
         try {
           console.log('🔍 Starting authentication check...');
@@ -278,12 +278,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       };
       
       checkAuth();
-    } else if (!hasCheckedAuth) {
-      // If we already have user data, just mark as checked
-      console.log('✅ User already authenticated, skipping check');
-      setHasCheckedAuth(true);
     }
-  }, [hasCheckedAuth, user]);
+  }, [hasCheckedAuth]);
 
   const value = {
     user,
