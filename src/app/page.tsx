@@ -47,22 +47,30 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    fetchGigs();
-  }, []);
-
-  const fetchGigs = async () => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/gigs?limit=12`);
-      if (response.ok) {
-        const data = await response.json();
-        setGigs(data.data || []);
+    let isMounted = true;
+    
+    const fetchGigs = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/gigs?limit=12`);
+        if (response.ok && isMounted) {
+          const data = await response.json();
+          setGigs(data.data || []);
+        }
+      } catch (error) {
+        console.error('Error fetching gigs:', error);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
       }
-    } catch (error) {
-      console.error('Error fetching gigs:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+    
+    fetchGigs();
+    
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
