@@ -1,30 +1,36 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    domains: [
+      'localhost',
+      'freelance-marketplace-backend-tvch.onrender.com',
+      'res.cloudinary.com', // If you use Cloudinary for images
+    ],
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "images.pexels.com",
-      },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-      {
-        protocol: "http",
-        hostname: "localhost",
-        port: "3000",
-        pathname: "/uploads/**",
-      },
-      {
-        protocol: "http",
-        hostname: "localhost",
-        port: "5000",
-        pathname: "/uploads/**",
+        protocol: 'https',
+        hostname: 'freelance-marketplace-backend-tvch.onrender.com',
+        port: '',
+        pathname: '/uploads/**',
       },
     ],
   },
-  // Add any other Next.js config options here
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://freelance-marketplace-backend-tvch.onrender.com/api/:path*',
+      },
+    ];
+  },
+  // Enable static exports for Netlify
+  output: 'standalone',
+  // Optimize for production
+  swcMinify: true,
+  // Enable compression
+  compress: true,
+  // Enable source maps in development only
+  productionBrowserSourceMaps: false,
 };
 
 module.exports = nextConfig;
