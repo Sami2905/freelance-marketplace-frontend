@@ -51,7 +51,8 @@ export default function TourProvider({ children }: TourProviderProps) {
       }, 1000);
       
       return () => clearTimeout(timer);
-    } else {
+    } else if (hasSeenWelcomeBefore) {
+      // Only set hasSeenWelcome if they've actually seen it before
       setHasSeenWelcome(true);
     }
   }, []);
