@@ -45,6 +45,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const isFetchingRef = useRef(false);
   const hasInitializedRef = useRef(false);
+  
+  // Disable auth check completely for now to prevent infinite loops
+  const DISABLE_AUTH_CHECK = true;
 
   // Development flag to force manual login (set to true to disable auto-login)
   const FORCE_MANUAL_LOGIN = false;
@@ -248,6 +251,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Check for existing session on mount (only once)
   useEffect(() => {
+    // TEMPORARILY DISABLE AUTH CHECK TO PREVENT INFINITE LOOPS
+    if (DISABLE_AUTH_CHECK) {
+      console.log('🚫 Auth check disabled to prevent infinite loops');
+      setRequireManualLogin(true);
+      setHasCheckedAuth(true);
+      setIsLoading(false);
+      return;
+    }
+    
     // Only run this effect once on mount
     if (hasInitializedRef.current) return;
     hasInitializedRef.current = true;
