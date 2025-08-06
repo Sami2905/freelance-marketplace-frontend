@@ -10,6 +10,9 @@ import { ToastProvider } from "@radix-ui/react-toast";
 import TourProvider from "@/components/providers/TourProvider";
 import FloatingHelp from "@/components/ui/FloatingHelp";
 
+// Force dynamic rendering for the entire app
+export const dynamic = 'force-dynamic';
+
 // Fonts configuration
 const fontSans = GeistSans;
 const fontMono = GeistMono;

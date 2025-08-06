@@ -6,6 +6,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function MessagesPage() {
   const { user, isAuthenticated } = useAuth();
   const { toast } = useToast();
