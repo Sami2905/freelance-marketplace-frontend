@@ -46,6 +46,9 @@ interface ImageFile {
   id: string;
 }
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function CreateGigPage() {
   const router = useRouter();
   const { user } = useAuth();

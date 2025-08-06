@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
 import RequireAuth from "../RequireAuth";
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function AdminPaymentsPage() {
   const { user } = useAuth();
   const [payments, setPayments] = useState<any[]>([]);

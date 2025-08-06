@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight, FiUserPlus } from "react-icons/fi";
 import { useAuth } from "../AuthContext";
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
 
 // Floating animation variants
 const floatingContainer = {
@@ -39,7 +42,7 @@ const backgroundShapes = [
   { id: 3, top: '40%', left: '50%', size: '150px', color: 'from-emerald-500/20 to-cyan-500/20' },
 ];
 
-export default function LoginPage() {
+function LoginContent() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [serverError, setServerError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -325,5 +328,20 @@ export default function LoginPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-700 rounded w-64 mb-4"></div>
+          <div className="h-4 bg-gray-700 rounded w-48"></div>
+        </div>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }

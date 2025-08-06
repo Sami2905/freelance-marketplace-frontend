@@ -33,6 +33,9 @@ interface CategoryFormData {
   isActive: boolean;
 }
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function CategoriesPage() {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);

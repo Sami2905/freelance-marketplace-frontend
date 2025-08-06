@@ -23,14 +23,16 @@ const nextConfig = {
       },
     ];
   },
-  // Enable static exports for Netlify
-  output: 'standalone',
   // Optimize for production
   swcMinify: true,
   // Enable compression
   compress: true,
   // Enable source maps in development only
   productionBrowserSourceMaps: false,
+  // Disable static generation for pages that need authentication
+  trailingSlash: false,
+  // Skip static generation for problematic pages
+  skipTrailingSlashRedirect: true,
 };
 
 module.exports = nextConfig;

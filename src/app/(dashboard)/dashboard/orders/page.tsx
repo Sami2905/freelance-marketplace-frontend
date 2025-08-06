@@ -34,6 +34,9 @@ interface Order {
   deadline: string;
 }
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function OrdersPage() {
   const router = useRouter();
   const { user } = useAuth();

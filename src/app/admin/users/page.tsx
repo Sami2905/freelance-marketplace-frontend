@@ -25,6 +25,9 @@ const roles = [
   { label: 'Admin', value: 'ADMIN' },
 ];
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function UsersPage() {
   const router = useRouter();
   const [users, setUsers] = useState<User[]>([]);

@@ -11,6 +11,9 @@ import { StatCard } from "@/components/dashboard/stat-card"
 import { Icons } from "@/components/icons"
 import { useAuth } from "@/app/AuthContext"
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function DashboardPage() {
   const { isAuthenticated, isLoading } = useAuth()
   const router = useRouter()

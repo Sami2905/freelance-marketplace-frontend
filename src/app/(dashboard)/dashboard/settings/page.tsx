@@ -10,6 +10,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Icons } from '@/components/icons';
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function SettingsPage() {
   const { user, fetchProfile } = useAuth();
   const [loading, setLoading] = useState(false);

@@ -27,6 +27,9 @@ interface EarningsStats {
   lastMonthEarnings: number;
 }
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function EarningsPage() {
   const { user } = useAuth();
   const [earnings, setEarnings] = useState<Earning[]>([]);

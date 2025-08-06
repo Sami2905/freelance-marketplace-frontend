@@ -31,6 +31,9 @@ interface Review {
   status: 'pending' | 'approved' | 'rejected';
 }
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function ReviewsPage() {
   const { user } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);

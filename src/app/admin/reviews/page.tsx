@@ -128,6 +128,9 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
   }
 }
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function AdminReviewsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();

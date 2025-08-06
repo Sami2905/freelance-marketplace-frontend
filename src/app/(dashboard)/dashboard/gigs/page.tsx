@@ -46,6 +46,9 @@ const statusColors = {
   rejected: 'bg-red-100 text-red-800'
 };
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function GigsPage() {
   const router = useRouter();
   const { user } = useAuth();

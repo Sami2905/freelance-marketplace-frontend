@@ -29,6 +29,9 @@ const categories = [
   { label: 'Video & Animation', value: 'video-animation' },
 ];
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function GigsPage() {
   const router = useRouter();
   const [gigs, setGigs] = useState<Gig[]>([]);

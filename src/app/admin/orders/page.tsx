@@ -29,6 +29,9 @@ const paymentStatuses = [
   { label: 'Refunded', value: 'refunded' },
 ];
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function OrdersPage() {
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
