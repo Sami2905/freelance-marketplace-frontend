@@ -64,8 +64,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const fetchProfile = async () => {
-    if (isFetchingRef.current) return; // Prevent multiple simultaneous calls
+    if (isFetchingRef.current) {
+      console.log('🔄 fetchProfile already in progress, skipping...');
+      return;
+    }
     
+    console.log('🚀 Starting fetchProfile...');
     isFetchingRef.current = true;
     setIsLoading(true);
     try {
@@ -244,58 +248,64 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Check for existing session on mount (only once)
   useEffect(() => {
-    if (!hasCheckedAuth && !isFetchingRef.current && !hasInitializedRef.current) {
-      hasInitializedRef.current = true;
-      const checkAuth = async () => {
-        try {
-          console.log('🔍 Starting authentication check...');
-          
-          // Only check auth if we're not on login/register pages
-          const currentPath = window.location.pathname;
-          console.log('📍 Current path:', currentPath);
-          
-          if (currentPath === '/login' || currentPath === '/register') {
-            console.log('🚫 On auth page, requiring manual login');
-            setRequireManualLogin(true);
-            setHasCheckedAuth(true);
-            setIsLoading(false);
-            return;
-          }
-          
-          // For development/testing: use the flag to force manual login
-          if (FORCE_MANUAL_LOGIN) {
-            console.log('🔒 Force manual login enabled');
-            setRequireManualLogin(true);
-            setHasCheckedAuth(true);
-            setIsLoading(false);
-            return;
-          }
-          
-          // Check if we have a token before trying to fetch profile
-          const token = localStorage.getItem('authToken');
-          if (!token) {
-            console.log('🔑 No auth token found, requiring manual login');
-            setRequireManualLogin(true);
-            setHasCheckedAuth(true);
-            setIsLoading(false);
-            return;
-          }
-          
-          console.log('🔐 Checking existing session...');
-          await fetchProfile();
-        } catch (error) {
-          console.error('❌ Initial auth check failed:', error);
-          setUser(null);
+    // Only run this effect once on mount
+    if (hasInitializedRef.current) return;
+    hasInitializedRef.current = true;
+    
+    const checkAuth = async () => {
+      try {
+        console.log('🔍 Starting authentication check...');
+        
+        // Only check auth if we're not on login/register pages
+        const currentPath = window.location.pathname;
+        console.log('📍 Current path:', currentPath);
+        
+        if (currentPath === '/login' || currentPath === '/register') {
+          console.log('🚫 On auth page, requiring manual login');
           setRequireManualLogin(true);
-          localStorage.removeItem('authToken'); // Clear invalid token
-        } finally {
           setHasCheckedAuth(true);
+          setIsLoading(false);
+          return;
         }
-      };
-      
-      checkAuth();
-    }
-  }, [hasCheckedAuth]);
+        
+        // For development/testing: use the flag to force manual login
+        if (FORCE_MANUAL_LOGIN) {
+          console.log('🔒 Force manual login enabled');
+          setRequireManualLogin(true);
+          setHasCheckedAuth(true);
+          setIsLoading(false);
+          return;
+        }
+        
+        // Check if we have a token before trying to fetch profile
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          console.log('🔑 No auth token found, requiring manual login');
+          setRequireManualLogin(true);
+          setHasCheckedAuth(true);
+          setIsLoading(false);
+          return;
+        }
+        
+        console.log('🔐 Checking existing session...');
+        await fetchProfile();
+      } catch (error) {
+        console.error('❌ Initial auth check failed:', error);
+        setUser(null);
+        setRequireManualLogin(true);
+        localStorage.removeItem('authToken'); // Clear invalid token
+      } finally {
+        setHasCheckedAuth(true);
+      }
+    };
+    
+    checkAuth();
+    
+    // Cleanup function to prevent memory leaks
+    return () => {
+      console.log('🧹 AuthContext useEffect cleanup');
+    };
+  }, []); // Empty dependency array - only run once
 
   const value = {
     user,
